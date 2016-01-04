@@ -1,2 +1,2 @@
 # wsrl_live
-a live example repository
+This is a live example for the Coding A Rogueliek Game winter study course at Williams.
