@@ -37,6 +37,7 @@ var Game = {
       o: null
     }
   },
+  _curUiMode: null,
   init: function () {
     console.log("WSRL Live Initialization");
     // this.DISPLAYS.main.o = new ROT.Display({width:this.DISPLAYS.main.w, height:this.DISPLAYS.main.h});
@@ -45,6 +46,7 @@ var Game = {
         this.DISPLAYS[displayName].o = new ROT.Display({width:this.DISPLAYS[displayName].w, height:this.DISPLAYS[displayName].h});
       }
     }
+    Game.switchUiMode(Game.UIMode.gameStart);
     this.renderAll();
   },
   getDisplay: function(displayName) {
@@ -56,16 +58,30 @@ var Game = {
     this.renderMessage();
   },
   renderAvatar: function() {
-    this.DISPLAYS.avatar.o.drawText(2,3,"avatar display");
+    if (this._curUiMode !== null && this._curUiMode.hasOwnProperty('renderOnAvatar')) {
+      this._curUiMode.renderOnAvatar(this.DISPLAYS.avatar.o);
+    } else {
+      this.DISPLAYS.avatar.o.drawText(2,1,"avatar display");
+    }
   },
   renderMain: function() {
-    this.DISPLAYS.main.o.drawText(2,1,"main display");
-    for (var i = 0; i < 5; i++) {
-      this.DISPLAYS.main.o.drawText(2,3+i,"TADA!!!");
+    if (this._curUiMode !== null && this._curUiMode.hasOwnProperty('renderOnMain')) {
+      this._curUiMode.renderOnMain(this.DISPLAYS.main.o);
+    } else {
+      this.DISPLAYS.main.o.drawText(2,1,"main display");
     }
   },
   renderMessage: function() {
     // this.DISPLAYS.message.o.drawText(2,3,"message display");
     Game.Message.renderOn(this.DISPLAYS.message.o);
+  },
+  switchUiMode: function (newMode) {
+    if (this._curUiMode !== null) {
+      this._curUiMode.exit();
+    }
+    this._curUiMode = newMode;
+    if (this._curUiMode !== null) {
+      this._curUiMode.enter();
+    }
   }
 };
