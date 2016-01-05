@@ -46,8 +46,18 @@ var Game = {
         this.DISPLAYS[displayName].o = new ROT.Display({width:this.DISPLAYS[displayName].w, height:this.DISPLAYS[displayName].h});
       }
     }
+
+    var bindEventToScreen = function(eventType) {
+      window.addEventListener(eventType, function(evt) {
+        Game.eventHandler(eventType, evt);
+      });
+    };
+    // Bind keyboard input events
+    bindEventToScreen('keypress');
+    bindEventToScreen('keydown');
+
+
     Game.switchUiMode(Game.UIMode.gameStart);
-    this.renderAll();
   },
   getDisplay: function(displayName) {
     return this.DISPLAYS[displayName].o;
@@ -82,6 +92,12 @@ var Game = {
     this._curUiMode = newMode;
     if (this._curUiMode !== null) {
       this._curUiMode.enter();
+    }
+    this.renderAll();
+  },
+  eventHandler: function (eventType, evt) {
+    if (this._curUiMode !== null && this._curUiMode.hasOwnProperty('handleInput')) {
+      this._curUiMode.handleInput(eventType, evt);
     }
   }
 };

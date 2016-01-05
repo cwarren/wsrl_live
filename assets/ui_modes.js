@@ -7,11 +7,13 @@ Game.UIMode.gameStart = {
   exit: function () {
     console.log("Game.UIMode.gameStart exit");
   },
-  handleInput: function () {
+  handleInput: function (eventType, evt) {
     console.log("Game.UIMode.gameStart handleInput");
+    Game.switchUiMode(Game.UIMode.gamePlay);
   },
   renderOnMain: function (display) {
     console.log("Game.UIMode.gameStart renderOnMain");
+    display.clear();
     display.drawText(4,4,"Welcome to WSRL");
     display.drawText(4,6,"press any key to continue");
   }
@@ -24,11 +26,21 @@ Game.UIMode.gamePlay = {
   exit: function () {
     console.log("Game.UIMode.gamePlay exit");
   },
-  handleInput: function () {
+  handleInput: function (eventType, evt) {
     console.log("Game.UIMode.gamePlay handleInput");
+    console.log(eventType);
+    console.dir(evt);
+    if (eventType == 'keypress' && evt.keyCode == 13) { // 13 = Enter
+      Game.switchUiMode(Game.UIMode.gameWin);
+    } else
+    if (eventType == 'keydown' && evt.keyCode == 27) { // 27 = Esc
+      Game.switchUiMode(Game.UIMode.gameLose);
+    }
   },
   renderOnMain: function (display) {
     console.log("Game.UIMode.gamePlay renderOnMain");
+    display.clear();
+    display.drawText(4,4,"Press [Enter] tp win, [Esc] to lose");
   }
 };
 
@@ -44,6 +56,8 @@ Game.UIMode.gameLose = {
   },
   renderOnMain: function (display) {
     console.log("Game.UIMode.gameLose renderOnMain");
+    display.clear();
+    display.drawText(4,4,"You lost. :(");
   }
 };
 
@@ -59,5 +73,7 @@ Game.UIMode.gameWin = {
   },
   renderOnMain: function (display) {
     console.log("Game.UIMode.gameWin renderOnMain");
+    display.clear();
+    display.drawText(4,4,"You WON!!!!");
   }
 };
