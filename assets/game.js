@@ -13,6 +13,9 @@ window.onload = function() {
         document.getElementById('wsrl-avatar-display').appendChild(   Game.getDisplay('avatar').getContainer());
         document.getElementById('wsrl-main-display').appendChild(   Game.getDisplay('main').getContainer());
         document.getElementById('wsrl-message-display').appendChild(   Game.getDisplay('message').getContainer());
+
+        Game.Message.sendMessage("Welcome to WSRL");
+
     }
 };
 
@@ -62,6 +65,7 @@ var Game = {
     }
   },
   renderMessage: function() {
-    this.DISPLAYS.message.o.drawText(2,3,"message display");
+    // this.DISPLAYS.message.o.drawText(2,3,"message display");
+    Game.Message.renderOn(this.DISPLAYS.message.o);
   }
 };
