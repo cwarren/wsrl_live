@@ -20,6 +20,7 @@ window.onload = function() {
 };
 
 var Game = {
+  PERSISTENCE_KEY: 'wsrlgame',
   DISPLAYS: {
     avatar: {
       w: 20,
@@ -37,10 +38,14 @@ var Game = {
       o: null
     }
   },
+  _game: null,
+  _randomSeed: 0,
   _curUiMode: null,
   init: function () {
     console.log("WSRL Live Initialization");
-    // this.DISPLAYS.main.o = new ROT.Display({width:this.DISPLAYS.main.w, height:this.DISPLAYS.main.h});
+
+    this._game = this;
+
     for (var displayName in this.DISPLAYS) {
       if (this.DISPLAYS.hasOwnProperty(displayName)) {
         this.DISPLAYS[displayName].o = new ROT.Display({width:this.DISPLAYS[displayName].w, height:this.DISPLAYS[displayName].h});
@@ -56,6 +61,7 @@ var Game = {
     bindEventToScreen('keypress');
     bindEventToScreen('keydown');
 
+    this._randomSeed = 5+ Math.floor(Math.random()*10000);
 
     Game.switchUiMode(Game.UIMode.gameStart);
   },
@@ -99,5 +105,17 @@ var Game = {
     if (this._curUiMode !== null && this._curUiMode.hasOwnProperty('handleInput')) {
       this._curUiMode.handleInput(eventType, evt);
     }
+  },
+  getRandomSeed: function () {
+    return this._randomSeed;
+  },
+  setRandomSeed: function (s) {
+    this._randomSeed = s;
+    console.log("using random seed "+this._randomSeed);
+    ROT.RNG.setSeed(this._randomSeed);
+  },
+  toJSON: function () {
+    var json = {"_randomSeed":this._randomSeed};
+    return json;
   }
 };
